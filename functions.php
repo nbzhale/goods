@@ -43,8 +43,9 @@ function uploadFile($filename, $path, $typelist=null) {
         }
         return $res;
     }
+    $upload_max_size = 20 * 1024 * 1024;
     // 本次文件大小的限制
-    if($upfile["size"] > 100000) {
+    if($upfile["size"] > $upload_max_size) {
         $res["info"] = "上传文件过大";
         return $res;
     }
@@ -60,7 +61,7 @@ function uploadFile($filename, $path, $typelist=null) {
     } while(file_exists($newfile));
     //执行上传处理
     if(is_uploaded_file($upfile["tmp_name"])) {
-        if(move_uploaded_file($upfile["tmp_file"], $path."/".$newfile)) {
+        if(move_uploaded_file($upfile["tmp_name"], $path."/".$newfile)) {
             $res["info"] = $newfile;
             $res["error"] = true;
             return $res;
@@ -71,4 +72,31 @@ function uploadFile($filename, $path, $typelist=null) {
         $res["info"] = "不是一个上传的文件";
     }
     return $res;
+}
+
+/**
+ * 等比缩放函数（以保存的方式实现）
+ * @param string $picname 被缩放的处理图片源
+ * @param int $maxx 缩放后图片的最大宽度
+ * @param int $maxy 缩放后图片的最大高度
+ * @param string $pre 缩放后图片名的前缀
+ * @return string 返回后的图片名称（带路径），如a.jpg=>s_a.jpg
+ */
+function imageUpdateSize($picname, $maxx=100, $maxy=100, $pre="s_") {
+    $info = getimagesize($picname);
+
+    $w = $info[0];
+    $h = $info[1];
+
+    switch($info[2]) {
+        case 1: // gif
+            $im = imagecreatefromgif($picname);
+            break;
+        case 2: // jpg
+            $im = imagecreatefromjpeg($picname);
+            break;
+        case 3: // png
+            $im = imagecreatefrompng($picname);
+            break;
+    }
 }

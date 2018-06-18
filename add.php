@@ -9,7 +9,7 @@
     <center>
         <?php include("menu.php"); // 导入导航栏 ?>
         <h3>发布商品信息</h3>
-        <form action="action.php?action=add" method="post">
+        <form action="action.php?action=add" method="post" enctype="multipart/form-data">
         <table border="0" width="400">
             <tr>
                 <td align="right">名称：</td>
