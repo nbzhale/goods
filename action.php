@@ -29,7 +29,8 @@ switch($_GET["action"]) {
         // 执行图片缩放
         imageUpdateSize("./uploads/".$pic, 50, 50);
         // sql
-        $sql = "insert into goods values(null,'{$name}','{$typeid}',{$$price},{$total},'{$pic}','{$note}','{$addtime}')";
+        $addtime = date("Y-m-d h:i:s", time());
+        $sql = "insert into goods values(null,'{$name}','{$typeid}',{$price},{$total},'{$pic}','{$note}','{$addtime}')";
         echo "sql:".$sql;
         break;
     case "del":
